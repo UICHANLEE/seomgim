@@ -83,6 +83,23 @@ address {
   transform: translateY(0);
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+:where(a, button, summary, iframe):focus-visible {
+  outline: 2px solid white;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 5px var(--blue);
+}
+
 .page-width {
   width: min(100%, 1440px);
   margin-inline: auto;
@@ -2009,6 +2026,673 @@ body[data-route-transition="out"] .page-shell {
   line-height: 1.75;
 }
 
+/* Interactive location experience */
+.hero-address__actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(7, 24, 63, 0.12);
+}
+
+.hero-address__actions a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 17px;
+  border: 1px solid rgba(7, 24, 63, 0.14);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.52);
+  color: var(--navy);
+  font-size: 12px;
+  font-weight: 680;
+  transition:
+    transform 220ms var(--ease-apple),
+    background 220ms ease;
+}
+
+.hero-address__actions a:first-child {
+  border-color: var(--navy);
+  background: var(--navy);
+  color: white;
+}
+
+.hero-address__actions a:hover {
+  transform: translateY(-2px);
+}
+
+.church-map-reveal {
+  min-width: 0;
+}
+
+.church-map {
+  position: relative;
+  min-width: 0;
+  min-height: 780px;
+  overflow: hidden;
+  border: 1px solid rgba(7, 24, 63, 0.1);
+  border-radius: 38px;
+  background: #d9e3e9;
+  box-shadow: 0 30px 80px rgba(7, 24, 63, 0.12);
+  isolation: isolate;
+}
+
+.church-map--compact {
+  min-height: 590px;
+}
+
+.church-map__frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  filter: saturate(0.72) contrast(0.94) brightness(1.04);
+  transition: filter 500ms ease;
+}
+
+.church-map:hover .church-map__frame,
+.church-map:focus-within .church-map__frame,
+.church-map.is-interactive .church-map__frame {
+  filter: saturate(1) contrast(1) brightness(1);
+}
+
+.church-map__live,
+.church-map__hint,
+.church-map__place,
+.church-map__activate {
+  position: absolute;
+  z-index: 2;
+}
+
+.church-map__live {
+  top: 22px;
+  right: 22px;
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  gap: 8px;
+  padding-inline: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.76);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 10px 28px rgba(7, 24, 63, 0.12);
+  color: var(--navy);
+  font-size: 10px;
+  font-weight: 720;
+  letter-spacing: 0.08em;
+  backdrop-filter: blur(15px);
+}
+
+.church-map__live span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #2f9a50;
+  box-shadow: 0 0 0 5px rgba(47, 154, 80, 0.13);
+  animation: map-live-pulse 2.2s ease-in-out infinite;
+}
+
+@keyframes map-live-pulse {
+  50% {
+    box-shadow: 0 0 0 9px rgba(47, 154, 80, 0.04);
+  }
+}
+
+.church-map__place {
+  bottom: 24px;
+  left: 24px;
+  display: flex;
+  width: min(330px, calc(100% - 48px));
+  flex-direction: column;
+  padding: 23px 24px 21px;
+  border: 1px solid rgba(255, 255, 255, 0.76);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.91);
+  box-shadow: 0 22px 55px rgba(7, 24, 63, 0.18);
+  backdrop-filter: blur(20px);
+  animation: map-place-in 720ms 220ms var(--ease-apple) both;
+}
+
+@keyframes map-place-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+}
+
+.church-map__place > span {
+  color: var(--blue);
+  font-size: 9px;
+  font-weight: 750;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.church-map__place strong {
+  margin-top: 10px;
+  color: var(--navy);
+  font-size: 22px;
+  letter-spacing: -0.05em;
+}
+
+.church-map__place small {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.church-map__place a {
+  display: flex;
+  min-height: 39px;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-top: 17px;
+  padding-top: 13px;
+  border-top: 1px solid var(--line);
+  color: var(--blue);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.church-map__hint {
+  top: 70px;
+  right: 24px;
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(7, 24, 63, 0.72);
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 9px;
+  letter-spacing: 0.02em;
+  backdrop-filter: blur(10px);
+}
+
+.church-map__activate {
+  display: none;
+}
+
+.visit-map-section {
+  scroll-margin-top: var(--header-height);
+  background: #eef1f2;
+}
+
+.visit-explorer {
+  display: grid;
+  align-items: stretch;
+  grid-template-columns: minmax(0, 1.24fr) minmax(390px, 0.76fr);
+  gap: clamp(18px, 2vw, 28px);
+}
+
+.visit-control-panel {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  padding: clamp(30px, 4vw, 54px);
+  border: 1px solid rgba(7, 24, 63, 0.08);
+  border-radius: 38px;
+  background: var(--paper);
+  box-shadow: 0 24px 70px rgba(7, 24, 63, 0.08);
+}
+
+.visit-control-panel h2 {
+  margin: 0;
+  font-size: clamp(40px, 4vw, 60px);
+  font-weight: 620;
+  letter-spacing: -0.07em;
+  line-height: 1.08;
+}
+
+.address-copy-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-top: 38px;
+  padding: 24px;
+  border: 1px solid rgba(7, 24, 63, 0.09);
+  border-radius: 22px;
+  background: white;
+  box-shadow: 0 14px 38px rgba(7, 24, 63, 0.06);
+}
+
+.address-copy-card > span:first-child {
+  color: var(--blue);
+  font-size: 10px;
+  font-weight: 730;
+  letter-spacing: 0.08em;
+}
+
+.address-copy-card strong {
+  max-width: calc(100% - 95px);
+  margin-top: 10px;
+  font-size: 17px;
+  letter-spacing: -0.035em;
+  line-height: 1.5;
+}
+
+.address-copy-card small {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.address-copy-card button {
+  position: absolute;
+  top: 24px;
+  right: 22px;
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 7px;
+  padding-inline: 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--navy);
+  font-size: 11px;
+  font-weight: 680;
+  cursor: pointer;
+  transition:
+    color 180ms ease,
+    background 180ms ease,
+    transform 200ms var(--ease-apple);
+}
+
+.address-copy-card button:hover {
+  background: var(--navy);
+  color: white;
+  transform: translateY(-1px);
+}
+
+.route-mode-picker {
+  margin-top: 28px;
+  padding-top: 28px;
+  border-top: 1px solid var(--line);
+}
+
+.route-mode-picker__label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 13px;
+}
+
+.route-mode-picker__label > span {
+  font-size: 13px;
+  font-weight: 720;
+}
+
+.route-mode-picker__label small {
+  color: var(--blue);
+  font-size: 9px;
+  font-weight: 720;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.route-mode-picker__buttons {
+  display: grid;
+  padding: 4px;
+  border: 1px solid rgba(7, 24, 63, 0.1);
+  border-radius: 16px;
+  background: #e8e9e7;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+}
+
+.route-mode-picker__buttons button {
+  min-height: 44px;
+  padding: 0 9px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 680;
+  cursor: pointer;
+  transition:
+    color 220ms ease,
+    background 220ms ease,
+    box-shadow 220ms ease,
+    transform 220ms var(--ease-apple);
+}
+
+.route-mode-picker__buttons button[aria-pressed="true"] {
+  background: white;
+  box-shadow: 0 5px 16px rgba(7, 24, 63, 0.1);
+  color: var(--navy);
+  transform: scale(1.01);
+}
+
+.route-mode-picker > p {
+  min-height: 48px;
+  margin: 17px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.65;
+  animation: route-copy-in 260ms var(--ease-apple) both;
+}
+
+@keyframes route-copy-in {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+}
+
+.route-primary-action {
+  display: flex;
+  min-height: 54px;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 18px;
+  padding-inline: 20px;
+  border-radius: 999px;
+  background: var(--blue);
+  color: white;
+  font-size: 13px;
+  font-weight: 700;
+  transition:
+    background 200ms ease,
+    transform 220ms var(--ease-apple);
+}
+
+.route-primary-action:hover {
+  background: var(--navy);
+  transform: translateY(-2px);
+}
+
+.map-provider-links {
+  display: grid;
+  margin-top: 24px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.map-provider-links > a {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: 108px;
+  align-items: flex-start;
+  flex-direction: column;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 17px;
+  background: rgba(255, 255, 255, 0.55);
+  transition:
+    border-color 200ms ease,
+    background 200ms ease,
+    transform 220ms var(--ease-apple);
+}
+
+.map-provider-links > a:hover {
+  border-color: rgba(10, 75, 148, 0.35);
+  background: white;
+  transform: translateY(-3px);
+}
+
+.map-provider-links > a > span:first-child {
+  display: grid;
+  width: 29px;
+  height: 29px;
+  place-items: center;
+  border-radius: 9px;
+  background: var(--navy);
+  color: white;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.map-provider-links > a:nth-child(2) > span:first-child {
+  background: #f4c71b;
+  color: #1d1d1d;
+}
+
+.map-provider-links > a:nth-child(3) > span:first-child {
+  background: #6ca24b;
+}
+
+.map-provider-links > a > div {
+  min-width: 0;
+  margin-top: auto;
+}
+
+.map-provider-links small,
+.map-provider-links strong {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.map-provider-links small {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.map-provider-links strong {
+  margin-top: 3px;
+  font-size: 12px;
+  letter-spacing: -0.025em;
+}
+
+.map-provider-links > a > span:last-child {
+  position: absolute;
+  top: 14px;
+  right: 12px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.visit-phone-link {
+  display: grid;
+  align-items: center;
+  margin-top: 25px;
+  padding-top: 23px;
+  border-top: 1px solid var(--line);
+  grid-template-columns: 1fr auto;
+}
+
+.visit-phone-link > span:first-child {
+  color: var(--muted);
+  font-size: 11px;
+  grid-column: 1 / -1;
+}
+
+.visit-phone-link strong {
+  margin-top: 5px;
+  color: var(--blue);
+  font-size: 21px;
+  letter-spacing: -0.035em;
+}
+
+.visit-phone-link > span:last-child {
+  grid-column: 2;
+  grid-row: 1 / 3;
+}
+
+.arrival-section {
+  overflow: hidden;
+  background: var(--navy);
+  color: white;
+}
+
+.arrival-grid {
+  display: grid;
+  align-items: stretch;
+  grid-template-columns: minmax(0, 0.96fr) minmax(0, 1.04fr);
+  gap: clamp(60px, 8vw, 125px);
+}
+
+.arrival-landmark {
+  position: relative;
+  min-height: 770px;
+  overflow: hidden;
+  border-radius: 40px;
+  background: #172746;
+}
+
+.arrival-landmark::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(3, 13, 34, 0.78), transparent 55%);
+  content: "";
+}
+
+.arrival-landmark img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 58%;
+  filter: saturate(0.86) contrast(0.96);
+  transition: transform 1s var(--ease-apple);
+}
+
+.arrival-landmark:hover img {
+  transform: scale(1.025);
+}
+
+.arrival-landmark__caption {
+  position: absolute;
+  right: 34px;
+  bottom: 31px;
+  left: 34px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+}
+
+.arrival-landmark__caption span {
+  color: #9bc7f6;
+  font-size: 9px;
+  font-weight: 720;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.arrival-landmark__caption strong {
+  margin-top: 12px;
+  font-size: clamp(29px, 3.2vw, 47px);
+  letter-spacing: -0.06em;
+}
+
+.arrival-landmark__caption p {
+  margin: 12px 0 0;
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 13px;
+}
+
+.arrival-guides {
+  align-self: center;
+}
+
+.arrival-guides .eyebrow {
+  color: #8cbceb;
+}
+
+.arrival-guides h2 {
+  margin: 0;
+  font-size: clamp(48px, 5.7vw, 78px);
+  font-weight: 610;
+  letter-spacing: -0.075em;
+  line-height: 1.06;
+}
+
+.arrival-guides__lead {
+  margin: 28px 0 0;
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 14px;
+}
+
+.arrival-accordion {
+  margin-top: 60px;
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.arrival-accordion details {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.arrival-accordion summary {
+  display: grid;
+  min-height: 92px;
+  align-items: center;
+  list-style: none;
+  cursor: pointer;
+  grid-template-columns: 48px 1fr auto;
+  gap: 12px;
+}
+
+.arrival-accordion summary::-webkit-details-marker {
+  display: none;
+}
+
+.arrival-accordion summary > span {
+  color: #7fb2e5;
+  font-size: 10px;
+  font-weight: 720;
+}
+
+.arrival-accordion summary strong {
+  font-size: 22px;
+  font-weight: 590;
+  letter-spacing: -0.04em;
+}
+
+.arrival-accordion summary i {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 50%;
+  font-size: 17px;
+  font-style: normal;
+  transition:
+    background 220ms ease,
+    transform 320ms var(--ease-apple);
+}
+
+.arrival-accordion details[open] summary i {
+  background: rgba(255, 255, 255, 0.11);
+  transform: rotate(45deg);
+}
+
+.arrival-accordion details > div {
+  padding: 0 46px 31px 60px;
+  animation: detail-in 300ms var(--ease-apple) both;
+}
+
+@keyframes detail-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+.arrival-accordion details p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.64);
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+.arrival-accordion details a {
+  display: inline-block;
+  margin-top: 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.38);
+  color: white;
+  font-size: 12px;
+  font-weight: 680;
+  line-height: 2;
+}
+
+.visit-sticky-actions {
+  display: none;
+}
+
 /* Responsive */
 @media (max-width: 1120px) {
   .desktop-nav {
@@ -2033,6 +2717,27 @@ body[data-route-transition="out"] .page-shell {
 
   .sermon-feature-grid {
     grid-template-columns: repeat(3, 1fr);
+  }
+
+  .visit-explorer,
+  .arrival-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .visit-explorer .church-map {
+    min-height: 660px;
+  }
+
+  .arrival-grid {
+    gap: 80px;
+  }
+
+  .arrival-landmark {
+    min-height: 680px;
+  }
+
+  .arrival-guides {
+    width: min(100%, 760px);
   }
 }
 
@@ -2256,6 +2961,170 @@ body[data-route-transition="out"] .page-shell {
   .notice-row {
     grid-template-columns: 85px 1fr 30px;
   }
+
+  .visit-hero .page-hero {
+    min-height: 610px;
+  }
+
+  .visit-hero .page-hero__inner {
+    min-height: 538px;
+    gap: 34px;
+  }
+
+  .visit-map-section {
+    padding-block: 70px;
+  }
+
+  .church-map,
+  .visit-explorer .church-map,
+  .church-map--compact {
+    min-height: 520px;
+    border-radius: 28px;
+  }
+
+  .church-map__frame {
+    pointer-events: none;
+  }
+
+  .church-map.is-interactive .church-map__frame {
+    pointer-events: auto;
+  }
+
+  .church-map__activate {
+    top: 50%;
+    left: 50%;
+    z-index: 4;
+    display: inline-flex;
+    min-height: 48px;
+    align-items: center;
+    gap: 9px;
+    padding-inline: 19px;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 999px;
+    background: rgba(7, 24, 63, 0.88);
+    box-shadow: 0 14px 35px rgba(7, 24, 63, 0.24);
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    backdrop-filter: blur(15px);
+    transform: translate(-50%, -50%);
+    transition:
+      top 320ms var(--ease-apple),
+      right 320ms var(--ease-apple),
+      transform 320ms var(--ease-apple);
+  }
+
+  .church-map__activate > span {
+    font-size: 17px;
+  }
+
+  .church-map.is-interactive .church-map__activate {
+    top: 18px;
+    right: 18px;
+    left: auto;
+    transform: none;
+  }
+
+  .church-map.is-interactive .church-map__live {
+    opacity: 0;
+  }
+
+  .church-map__place {
+    right: 18px;
+    bottom: 18px;
+    left: 18px;
+    width: auto;
+    padding: 19px 20px 17px;
+    transition:
+      opacity 220ms ease,
+      transform 320ms var(--ease-apple);
+  }
+
+  .church-map.is-interactive .church-map__place {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(12px);
+  }
+
+  .church-map__live {
+    top: 17px;
+    right: 17px;
+    transition: opacity 180ms ease;
+  }
+
+  .church-map__hint {
+    display: none;
+  }
+
+  .visit-control-panel {
+    padding: 32px;
+    border-radius: 28px;
+  }
+
+  .arrival-section {
+    padding-bottom: 148px;
+  }
+
+  .arrival-landmark {
+    min-height: 620px;
+    border-radius: 28px;
+  }
+
+  .arrival-grid {
+    gap: 64px;
+  }
+
+  .visit-sticky-actions {
+    position: fixed;
+    right: 12px;
+    bottom: max(12px, env(safe-area-inset-bottom));
+    left: 12px;
+    z-index: 80;
+    display: flex;
+    padding: 7px;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 999px;
+    background: rgba(247, 246, 242, 0.9);
+    box-shadow: 0 18px 55px rgba(7, 24, 63, 0.22);
+    backdrop-filter: blur(22px) saturate(150%);
+    transition:
+      opacity 220ms ease,
+      transform 300ms var(--ease-apple);
+  }
+
+  .visit-sticky-actions a {
+    display: inline-flex;
+    min-height: 50px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 720;
+  }
+
+  .visit-sticky-actions a:first-child {
+    flex: 1;
+    justify-content: space-between;
+    padding-inline: 20px;
+    background: var(--navy);
+    color: white;
+  }
+
+  .visit-sticky-actions a:last-child {
+    width: 72px;
+    color: var(--navy);
+  }
+
+  body[data-menu-open="true"] .visit-sticky-actions {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(12px);
+  }
+
+  body:has(.visit-sticky-actions) .site-footer {
+    padding-bottom: calc(96px + env(safe-area-inset-bottom));
+  }
 }
 
 @media (max-width: 560px) {
@@ -2473,6 +3342,111 @@ body[data-route-transition="out"] .page-shell {
 
   .visit-details dl > div {
     grid-template-columns: 70px 1fr;
+  }
+
+  .visit-hero .page-hero {
+    min-height: 590px;
+  }
+
+  .visit-hero .page-hero__inner {
+    min-height: 518px;
+    padding-bottom: 35px;
+  }
+
+  .visit-hero .page-hero h1 {
+    font-size: clamp(46px, 13vw, 62px);
+  }
+
+  .hero-address__actions {
+    gap: 6px;
+    margin-top: 18px;
+    padding-top: 15px;
+  }
+
+  .hero-address__actions a {
+    flex: 1;
+    padding-inline: 10px;
+  }
+
+  .church-map,
+  .visit-explorer .church-map,
+  .church-map--compact {
+    min-height: 480px;
+  }
+
+  .church-map__place strong {
+    font-size: 19px;
+  }
+
+  .church-map__place a {
+    font-size: 11px;
+  }
+
+  .visit-control-panel {
+    padding: 27px 22px;
+  }
+
+  .visit-control-panel h2 {
+    font-size: 42px;
+  }
+
+  .address-copy-card {
+    margin-top: 30px;
+    padding: 21px;
+  }
+
+  .address-copy-card strong {
+    max-width: none;
+    padding-right: 0;
+  }
+
+  .address-copy-card button {
+    position: static;
+    align-self: flex-start;
+    margin-top: 17px;
+  }
+
+  .map-provider-links {
+    grid-template-columns: 1fr;
+  }
+
+  .map-provider-links > a {
+    min-height: 64px;
+    align-items: center;
+    flex-direction: row;
+    padding: 11px 13px;
+  }
+
+  .map-provider-links > a > div {
+    margin: 0 0 0 12px;
+  }
+
+  .map-provider-links > a > span:last-child {
+    top: 50%;
+    right: 14px;
+    transform: translateY(-50%);
+  }
+
+  .arrival-landmark {
+    min-height: 570px;
+  }
+
+  .arrival-landmark__caption {
+    right: 22px;
+    bottom: 22px;
+    left: 22px;
+  }
+
+  .arrival-guides h2 {
+    font-size: 49px;
+  }
+
+  .arrival-accordion {
+    margin-top: 45px;
+  }
+
+  .arrival-accordion details > div {
+    padding: 0 0 27px 48px;
   }
 }
 

@@ -55,6 +55,18 @@ test("server-renders key church routes", async () => {
   }
 });
 
+test("renders the interactive visit map and route actions", async () => {
+  const response = await render("/visit");
+  assert.equal(response.status, 200);
+
+  const html = await response.text();
+  assert.match(html, /openstreetmap\.org\/export\/embed\.html/);
+  assert.match(html, /재건섬김교회 주변 실제 지도/);
+  assert.match(html, /주소 복사/);
+  assert.match(html, /카카오맵 길찾기/);
+  assert.match(html, /현재 위치에서 길찾기/);
+});
+
 test("starter-only assets and metadata are removed", async () => {
   const [page, layout, packageJson, css] = await Promise.all([
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),

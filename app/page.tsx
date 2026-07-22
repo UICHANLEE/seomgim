@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ChurchMap } from "./components/ChurchMap";
 import { Reveal } from "./components/Reveal";
 import { TransitionLink } from "./components/TransitionLink";
 import { SITE_INFO, VALUES } from "./data/site";
@@ -191,19 +192,8 @@ export default function Home() {
               </TransitionLink>
             </div>
           </Reveal>
-          <Reveal className="map-art" delay={100}>
-            <div className="map-art__roads" aria-hidden="true">
-              <span />
-              <span />
-              <span />
-              <span />
-            </div>
-            <div className="map-pin">
-              <span className="map-pin__dot" />
-              <strong>재건섬김교회</strong>
-              <small>부산 남구 문현동</small>
-            </div>
-            <p>35.1438° N · 129.0755° E</p>
+          <Reveal className="church-map-reveal" delay={100}>
+            <ChurchMap compact />
           </Reveal>
         </div>
       </section>

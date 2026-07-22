@@ -5,12 +5,26 @@ export const SITE_INFO = {
   presbytery: "부산노회",
   pastor: "이남열 목사",
   address: "부산광역시 남구 고동골로78번길 74",
+  lotAddress: "부산광역시 남구 문현동 100-19",
   shortAddress: "부산 남구 문현동",
   postalCode: "48417",
   phone: "051-632-5010",
   phoneHref: "tel:+82516325010",
-  mapUrl:
-    "https://map.naver.com/p/search/%EC%9E%AC%EA%B1%B4%EC%84%AC%EA%B9%80%EA%B5%90%ED%9A%8C",
+  coordinates: {
+    latitude: 35.1438094,
+    longitude: 129.0755636,
+  },
+  mapUrl: "https://map.naver.com/p/entry/place/13481708",
+  mapEmbedUrl:
+    "https://www.openstreetmap.org/export/embed.html?bbox=129.0705636%2C35.1408094%2C129.0805636%2C35.1468094&layer=mapnik&marker=35.1438094%2C129.0755636",
+  openStreetMapUrl:
+    "https://www.openstreetmap.org/?mlat=35.1438094&mlon=129.0755636#map=18/35.1438094/129.0755636",
+  kakaoMapUrl:
+    "https://map.kakao.com/link/map/%EC%9E%AC%EA%B1%B4%EC%84%AC%EA%B9%80%EA%B5%90%ED%9A%8C,35.1438094,129.0755636",
+  kakaoDirectionsUrl:
+    "https://map.kakao.com/link/to/%EC%9E%AC%EA%B1%B4%EC%84%AC%EA%B9%80%EA%B5%90%ED%9A%8C,35.1438094,129.0755636",
+  googleDirectionsUrl:
+    "https://www.google.com/maps/dir/?api=1&destination=35.1438094%2C129.0755636",
   youtubeUrl:
     "https://www.youtube.com/@%EC%9E%AC%EA%B1%B4%EC%84%AC%EA%B9%80%EA%B5%90%ED%9A%8C",
 } as const;
