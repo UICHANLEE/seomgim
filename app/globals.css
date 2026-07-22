@@ -223,14 +223,23 @@ body[data-route-transition="out"] .page-shell {
   inset: 0 0 auto;
   z-index: 100;
   height: var(--header-height);
+}
+
+.site-header::before {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.42);
   background: rgba(250, 250, 248, 0.82);
   box-shadow: 0 4px 22px rgba(3, 17, 43, 0.04);
   backdrop-filter: saturate(150%) blur(20px);
   -webkit-backdrop-filter: saturate(150%) blur(20px);
+  content: "";
 }
 
 .site-header__inner {
+  position: relative;
+  z-index: 2;
   display: grid;
   width: min(100%, 1540px);
   height: 100%;
@@ -2047,7 +2056,7 @@ body[data-route-transition="out"] .page-shell {
 
   .menu-toggle {
     position: relative;
-    z-index: 102;
+    z-index: 3;
     display: flex;
     width: 42px;
     height: 42px;
@@ -2079,7 +2088,7 @@ body[data-route-transition="out"] .page-shell {
   .mobile-menu {
     position: fixed;
     inset: 0;
-    z-index: 101;
+    z-index: 1;
     display: flex;
     visibility: hidden;
     flex-direction: column;
