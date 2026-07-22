@@ -5,6 +5,7 @@ import { SITE_INFO } from "../data/site";
 
 export function ChurchMap({ compact = false }: { compact?: boolean }) {
   const [interactive, setInteractive] = useState(false);
+  const [requiresActivation, setRequiresActivation] = useState(true);
   const activateButtonRef = useRef<HTMLButtonElement>(null);
 
   const endMapInteraction = () => {
@@ -21,6 +22,18 @@ export function ChurchMap({ compact = false }: { compact?: boolean }) {
     };
     document.addEventListener("keydown", closeMapInteraction);
     return () => document.removeEventListener("keydown", closeMapInteraction);
+  }, []);
+
+  useEffect(() => {
+    const mobileViewport = window.matchMedia("(max-width: 820px)");
+    const syncActivationRequirement = () => {
+      setRequiresActivation(mobileViewport.matches);
+    };
+
+    syncActivationRequirement();
+    mobileViewport.addEventListener("change", syncActivationRequirement);
+    return () =>
+      mobileViewport.removeEventListener("change", syncActivationRequirement);
   }, []);
 
   return (
@@ -45,7 +58,7 @@ export function ChurchMap({ compact = false }: { compact?: boolean }) {
         loading="lazy"
         referrerPolicy="strict-origin-when-cross-origin"
         allowFullScreen
-        tabIndex={interactive ? 0 : -1}
+        tabIndex={!requiresActivation || interactive ? 0 : -1}
       />
 
       <button
