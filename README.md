@@ -23,6 +23,15 @@ npm install
 npm run dev
 ```
 
+Vercel과 동일한 Next.js 개발 서버와 프로덕션 빌드는 다음 명령을 사용합니다.
+
+```bash
+npm run dev:vercel
+npm run build:vercel
+```
+
+기본 `dev`·`build` 명령은 기존 Sites/Cloudflare용 vinext 환경을 유지합니다.
+
 검증 명령은 다음과 같습니다.
 
 ```bash
