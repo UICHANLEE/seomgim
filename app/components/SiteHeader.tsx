@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { NAV_ITEMS, SITE_INFO } from "../data/site";
 import { Logo } from "./Logo";
 import { TransitionLink } from "./TransitionLink";
@@ -9,12 +9,32 @@ import { TransitionLink } from "./TransitionLink";
 export function SiteHeader() {
   const pathname = usePathname();
   const [menuPath, setMenuPath] = useState<string | null>(null);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
   const menuOpen = menuPath === pathname;
 
   useEffect(() => {
     document.body.dataset.menuOpen = menuOpen ? "true" : "false";
+    const backgroundContent = document.querySelectorAll<HTMLElement>(
+      ".skip-link, #main-content, .site-footer",
+    );
+    backgroundContent.forEach((element) => {
+      element.inert = menuOpen;
+    });
+
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (menuOpen && event.key === "Escape") {
+        setMenuPath(null);
+        requestAnimationFrame(() => menuButtonRef.current?.focus());
+      }
+    };
+    document.addEventListener("keydown", closeOnEscape);
+
     return () => {
       delete document.body.dataset.menuOpen;
+      document.removeEventListener("keydown", closeOnEscape);
+      backgroundContent.forEach((element) => {
+        element.inert = false;
+      });
     };
   }, [menuOpen]);
 
@@ -45,6 +65,7 @@ export function SiteHeader() {
         </a>
 
         <button
+          ref={menuButtonRef}
           className="menu-toggle"
           type="button"
           aria-label={menuOpen ? "메뉴 닫기" : "메뉴 열기"}
@@ -56,7 +77,13 @@ export function SiteHeader() {
         </button>
       </div>
 
-      <div className={`mobile-menu${menuOpen ? " is-open" : ""}`}>
+      <div
+        className={`mobile-menu${menuOpen ? " is-open" : ""}`}
+        role="dialog"
+        aria-modal="true"
+        aria-label="전체 메뉴"
+        aria-hidden={!menuOpen}
+      >
         <nav aria-label="모바일 메뉴">
           {NAV_ITEMS.map((item, index) => (
             <TransitionLink
