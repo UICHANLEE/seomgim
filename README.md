@@ -1,98 +1,50 @@
-# vinext-starter
+# 재건섬김교회 홈페이지
 
-A clean full-stack starter running on
-[vinext](https://github.com/cloudflare/vinext), with optional Cloudflare D1 and
-Drizzle support.
+부산광역시 남구 문현동에 있는 재건섬김교회의 반응형 홈페이지입니다.
+교회를 처음 찾는 방문자가 소개, 예배, 말씀, 다음세대, 소식, 오시는 길을
+빠르게 확인할 수 있도록 구성했습니다.
 
-## Prerequisites
+## 주요 페이지
 
-- Node.js `>=22.13.0`
+- `/` 홈
+- `/about` 교회 소개
+- `/worship` 예배 안내
+- `/sermons` 공식 YouTube 예배 영상
+- `/next-generation` 다음세대 안내
+- `/news` 교회 소식
+- `/visit` 주소, 전화, 지도 안내
 
-## Quick Start
+## 로컬 실행
+
+Node.js `22.13.0` 이상이 필요합니다.
 
 ```bash
 npm install
 npm run dev
-npm run build
 ```
 
-This starter does not use `wrangler.jsonc`.
+검증 명령은 다음과 같습니다.
 
-## Included Shape
-
-- edit site code under `app/`
-- `.openai/hosting.json` declares optional Sites D1 and R2 bindings
-- `vite.config.ts` simulates declared bindings for local development
-- `db/schema.ts` starts intentionally empty
-- `examples/d1/` contains an optional D1 example surface
-- `drizzle.config.ts` supports local migration generation when needed
-
-## Workspace Auth Headers
-
-OpenAI workspace sites can read the current user's email from
-`oai-authenticated-user-email`.
-
-SIWC-authenticated workspace sites may also receive
-`oai-authenticated-user-full-name` when the user's SIWC profile has a non-empty
-`name` claim. The full-name value is percent-encoded UTF-8 and is accompanied by
-`oai-authenticated-user-full-name-encoding: percent-encoded-utf-8`.
-
-Treat the full name as optional and fall back to email when it is absent:
-
-```tsx
-import { headers } from "next/headers";
-
-export default async function Home() {
-  const requestHeaders = await headers();
-  const email = requestHeaders.get("oai-authenticated-user-email");
-  const encodedFullName = requestHeaders.get("oai-authenticated-user-full-name");
-  const fullName =
-    encodedFullName &&
-    requestHeaders.get("oai-authenticated-user-full-name-encoding") ===
-      "percent-encoded-utf-8"
-      ? decodeURIComponent(encodedFullName)
-      : null;
-
-  const displayName = fullName ?? email;
-  // ...
-}
+```bash
+npm run lint
+npm test
 ```
 
-## Optional Dispatch-Owned ChatGPT Sign-In
+`npm test`는 프로덕션 빌드를 만든 뒤 주요 페이지의 서버 렌더링과 초기
+템플릿 제거 여부를 검사합니다.
 
-Import the ready-to-use helpers from `app/chatgpt-auth.ts` when the site needs
-optional or required ChatGPT sign-in:
+## 콘텐츠 원칙
 
-- Use `getChatGPTUser()` for optional signed-in UI.
-- Use `requireChatGPTUser(returnTo)` for server-rendered pages that should send
-  anonymous visitors through Sign in with ChatGPT.
-- Use `chatGPTSignInPath(returnTo)` and `chatGPTSignOutPath(returnTo)` for
-  browser links or actions.
-- Pass a same-origin relative `returnTo` path for the destination after sign-in
-  or sign-out. The helper validates and safely encodes it.
-- Mark protected pages with `export const dynamic = "force-dynamic"` because
-  they depend on per-request identity headers.
+- 교회명, 교단, 노회, 담임목사, 주소는 교회 공식 YouTube 소개와
+  도로명주소 자료를 기준으로 작성했습니다.
+- 대표전화는 네이버 지도 등록 정보인 `051-632-5010`을 사용합니다.
+- 공개 자료로 정확한 예배 시각을 확인할 수 없어 임의로 기재하지 않고
+  전화 문의로 안내합니다.
+- 별도의 공식 로고 파일을 찾지 못해, 실제 교회 간판의 형태와 색에서
+  착안한 홈페이지용 심볼과 워드마크를 사용합니다.
 
-Dispatch owns `/signin-with-chatgpt`, `/signout-with-chatgpt`, `/callback`, the
-OAuth cookies, and identity header injection. Do not implement app routes for
-those reserved paths. Routes that do not import and call the helper remain
-anonymous-compatible.
+## 배포
 
-SIWC establishes identity only; it does not prove workspace membership. Use the
-Sites hosting platform's access policy controls for workspace-wide restrictions,
-or enforce explicit server-side membership or allowlist checks.
-
-Use SIWC for account pages, user-specific dashboards, saved records, and write
-actions tied to the current ChatGPT user. Leave public content anonymous.
-
-## Useful Commands
-
-- `npm run dev`: start local development
-- `npm run build`: verify the vinext build output
-- `npm test`: build the starter and verify its rendered loading skeleton
-- `npm run db:generate`: generate Drizzle migrations after schema changes
-
-## Learn More
-
-- [vinext Documentation](https://github.com/cloudflare/vinext)
-- [Drizzle D1 Guide](https://orm.drizzle.team/docs/get-started/d1-new)
+이 프로젝트는 vinext 기반으로 빌드되며 Sites 설정은
+`.openai/hosting.json`에 있습니다. 데이터베이스나 별도 런타임 환경 변수는
+사용하지 않습니다.
